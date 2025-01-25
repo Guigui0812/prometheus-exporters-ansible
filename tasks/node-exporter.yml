@@ -1,0 +1,44 @@
+- name: Download exporters for amd64 servers
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-amd64.tar.gz
+    dest: /etc/prometheus-exporters/node_exporter-1.8.2.linux-amd64.tar.gz
+    mode: '0440'
+  when: ansible_architecture == 'amd64' 
+
+- name: 
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.8.2/node_exporter-1.8.2.linux-armv7.tar.gz
+    dest: /etc/prometheus-exporters/node_exporter-1.8.2.linux-armv7.tar.gz
+    mode: '0440'
+  when: ansible_architecture == 'armv7l' 
+
+- name: Extract node_exporter
+  ansible.builtin.unarchive:
+    src: /etc/prometheus-exporters/node_exporter-1.8.2.linux-amd64.tar.gz
+    dest: /etc/prometheus-exporters/
+    remote_src: yes
+  when: ansible_architecture == 'amd64' 
+
+- name: Extract node_exporter
+  ansible.builtin.unarchive:
+    src: /etc/prometheus-exporters/node_exporter-1.8.2.linux-armv7.tar.gz
+    dest: /etc/prometheus-exporters/
+    remote_src: yes
+  when: ansible_architecture == 'armv7l' 
+
+- name: Set exporter service values
+  set_fact:
+    prom_exporter_service_desc: Node Exporter service
+    prom_exporter_startup_cmd: /etc/prometheus-exporters/node_exporter-1.8.2.linux-armv7/node_exporter --web.listen-address=:9100
+
+- name: Create node_exporter service
+  template:
+    src: templates/exporter.service
+    dest: /etc/systemd/system/node_exporter.service
+
+- name: Start exporter service
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: node_exporter
+    enabled: true

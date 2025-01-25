@@ -1,0 +1,4 @@
+---
+# defaults file for prometheus-exporters
+prometheus_node_exporter: true
+prometheus_graphite_exporter: false

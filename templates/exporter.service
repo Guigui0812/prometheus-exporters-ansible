@@ -1,0 +1,13 @@
+[Unit]
+Description={{ prom_exporter_service_desc }}
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prom_exporters_user
+Group=prom_exporters_user
+Type=simple
+ExecStart={{ prom_exporter_startup_cmd }}
+
+[Install]
+WantedBy=multi-user.target

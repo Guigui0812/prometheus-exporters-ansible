@@ -1,0 +1,50 @@
+- name: Download exporters for amd64 servers
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/graphite_exporter/releases/download/v0.16.0/graphite_exporter-0.16.0.linux-amd64.tar.gz
+    dest: /etc/prometheus-exporters/graphite_exporter.tar.gz
+    mode: '0440'
+  when: ansible_architecture == 'amd64' 
+
+- name: 
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/graphite_exporter/releases/download/v0.16.0/graphite_exporter-0.16.0.linux-armv7.tar.gz
+    dest: /etc/prometheus-exporters/graphite_exporter.tar.gz
+    mode: '0440'
+  when: ansible_architecture == 'armv7l' 
+
+- name: Extract graphite_exporter
+  ansible.builtin.unarchive:
+    src: /etc/prometheus-exporters/graphite_exporter.tar.gz
+    dest: /etc/prometheus-exporters/
+    remote_src: yes
+  when: ansible_architecture == 'amd64' 
+
+- name: Extract graphite_exporter
+  ansible.builtin.unarchive:
+    src: /etc/prometheus-exporters/graphite_exporter.tar.gz
+    dest: /etc/prometheus-exporters/
+    remote_src: yes
+  when: ansible_architecture == 'armv7l' 
+
+- name: Create graphite_exporter service
+  template:
+    src: files/graphite_mapping.conf
+    dest: /etc/prometheus-exporters/graphite_mapping.conf
+
+- name: Set exporter service values
+  set_fact:
+    prom_exporter_service_desc: Graphite Exporter service
+    prom_exporter_startup_cmd: /etc/prometheus-exporters/graphite_exporter-0.16.0.linux-armv7/graphite_exporter --graphite.mapping-config=/etc/prometheus-exporters/graphite_mapping.conf --graphite.listen-address=:2003
+
+- name: Create graphite_exporter service
+  template:
+    src: templates/exporter.service
+    dest: /etc/systemd/system/graphite_exporter.service
+
+- name: Start exporter service
+  ansible.builtin.systemd_service:
+    state: restarted
+    daemon_reload: true
+    name: graphite_exporter
+    enabled: true
+    enabled: true

@@ -1,0 +1,20 @@
+---
+- name: Create the prometheus-exporters directory
+  file:
+    path: /etc/prometheus-exporters
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: 0755
+
+- name: Create user graphite_exporter
+  user:
+    name: prom_exporters_user
+
+- name: Setup node_exporter
+  include_tasks: node-exporter.yml
+  when: prometheus_node_exporter is true
+
+- name: Setup graphite_exporter
+  include_tasks: graphite-exporter.yml
+  when: prometheus_graphite_exporter is true
