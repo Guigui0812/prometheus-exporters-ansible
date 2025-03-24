@@ -1,5 +1,5 @@
 [Unit]
-Description={{ prom_exporter_service_desc }}
+Description=Node Exporter service
 Wants=network-online.target
 After=network-online.target
 
@@ -7,7 +7,7 @@ After=network-online.target
 User=prom_exporters_user
 Group=prom_exporters_user
 Type=simple
-ExecStart={{ prom_exporter_startup_cmd }}
+ExecStart=/usr/bin/node_exporter {{ prometheus_node_exporter_cmd_opt }}
 
 [Install]
 WantedBy=multi-user.target

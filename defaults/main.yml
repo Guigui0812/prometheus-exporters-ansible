@@ -1,4 +1,11 @@
 ---
 # defaults file for prometheus-exporters
+
+## NODE EXPORTER
 prometheus_node_exporter: true
+prometheus_node_exporter_version: 1.8.2
+prometheus_node_exporter_cmd_opt: --web.listen-address=:9100
+
+
+## GRAPHITE EXPORTER
 prometheus_graphite_exporter: false
