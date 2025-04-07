@@ -7,7 +7,7 @@ After=network-online.target
 User=prom_exporters_user
 Group=prom_exporters_user
 Type=simple
-ExecStart=/usr/bin/node_exporter {{ prometheus_node_exporter_cmd_opt }}
+ExecStart=/usr/local/bin/node_exporter {{ prometheus_node_exporter_cmd_opt }}
 
 [Install]
 WantedBy=multi-user.target

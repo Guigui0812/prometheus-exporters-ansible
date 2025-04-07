@@ -12,10 +12,17 @@
     mode: '0440'
   when: ansible_architecture == 'armv7l' 
 
+- name: Download exporters for arm64 servers
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-arm64.tar.gz"
+    dest: /tmp/node_exporter-{{ prometheus_node_exporter_version }}.linux-arm64.tar.gz
+    mode: '0440'
+  when: ansible_architecture == 'aarch64' or ansible_architecture == 'arm64'
+
 - name: Extract node_exporter for amd64 servers
   ansible.builtin.unarchive:
     src: "/tmp/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
-    dest: /usr/bin/
+    dest: /usr/local/bin/
     remote_src: yes
     extra_opts:
       - "--strip-component=1"
@@ -24,15 +31,24 @@
 - name: Extract node_exporter for armv7 servers
   ansible.builtin.unarchive:
     src: "/tmp/node_exporter-{{ prometheus_node_exporter_version }}.linux-armv7.tar.gz"
-    dest: /usr/bin/
+    dest: /usr/local/bin/
     remote_src: yes
     extra_opts:
       - "--strip-component=1"
   when: ansible_architecture == 'armv7l' 
 
+- name: Extract node_exporter for arm64 servers
+  ansible.builtin.unarchive:
+    src: "/tmp/node_exporter-{{ prometheus_node_exporter_version }}.linux-arm64.tar.gz"
+    dest: /usr/local/bin/
+    remote_src: yes
+    extra_opts:
+      - "--strip-component=1"
+  when: ansible_architecture == 'aarch64' or ansible_architecture == 'arm64'
+
 - name: Create node_exporter service
   template:
-    src: templates/exporter.service
+    src: templates/node_exporter.service
     dest: /etc/systemd/system/node_exporter.service
 
 - name: Start exporter service

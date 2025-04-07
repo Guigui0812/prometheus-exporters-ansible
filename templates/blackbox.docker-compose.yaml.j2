@@ -1,0 +1,9 @@
+services:
+  blackbox-exporter:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: {{ blackbox_exporter_container_name }}
+    restart: always
+    ports:
+      - {{ blackbox_exporter_port }}:9115
+    volumes:
+      - {{ blackbox_exporter_config_directory }}:/config

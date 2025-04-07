@@ -18,3 +18,7 @@
 - name: Setup graphite_exporter
   include_tasks: graphite-exporter.yml
   when: prometheus_graphite_exporter is true
+
+- name: Setup blackbox_exporter
+  include_tasks: blackbox-exporter.yaml
+  when: blackbox_exporter is true

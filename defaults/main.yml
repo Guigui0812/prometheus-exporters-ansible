@@ -9,3 +9,9 @@ prometheus_node_exporter_cmd_opt: --web.listen-address=:9100
 
 ## GRAPHITE EXPORTER
 prometheus_graphite_exporter: false
+
+## BLACKBOX EXPORTER
+blackbox_exporter_port: 9115
+blackbox_exporter: false
+blackbox_exporter_container_name: blackbox_exporter
+blackbox_exporter_config_directory: /opt/blackbox-exporter/config
