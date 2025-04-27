@@ -21,6 +21,7 @@
     owner: prom_exporters_user
     group: prom_exporters_user
     mode: 0644
+  notify: Restart blackbox container
 
 - name: Import blackbox exporter docker-compose
   ansible.builtin.template:
