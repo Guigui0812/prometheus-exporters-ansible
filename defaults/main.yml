@@ -15,3 +15,4 @@ blackbox_exporter_port: 9115
 blackbox_exporter: false
 blackbox_exporter_container_name: blackbox_exporter
 blackbox_exporter_config_directory: /opt/blackbox-exporter/config
+blackbox_skip_ssl_verify: false

@@ -7,3 +7,4 @@ services:
       - {{ blackbox_exporter_port }}:9115
     volumes:
       - {{ blackbox_exporter_config_directory }}:/config
+    command: --config.file=/config/blackbox.yaml
