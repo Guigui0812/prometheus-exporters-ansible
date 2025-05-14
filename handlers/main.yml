@@ -2,5 +2,5 @@
 # handlers file for prometheus-exporters
 - name: Restart blackbox container
   community.docker.docker_compose_v2:
-    project_src: "/opt/blackbox_exporter/"
+    project_src: /opt/blackbox_exporter/
     state: restarted
