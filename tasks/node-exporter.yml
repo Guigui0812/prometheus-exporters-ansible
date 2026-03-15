@@ -26,7 +26,7 @@
     remote_src: yes
     extra_opts:
       - "--strip-component=1"
-  when: ansible_architecture == 'amd64' or ansible_architecture == 'x86_64'
+  when: not ansible_check_mode and ansible_architecture == 'amd64' or ansible_architecture == 'x86_64'
 
 - name: Extract node_exporter for armv7 servers
   ansible.builtin.unarchive:
@@ -35,7 +35,7 @@
     remote_src: yes
     extra_opts:
       - "--strip-component=1"
-  when: ansible_architecture == 'armv7l' 
+  when: not ansible_check_mode and ansible_architecture == 'armv7l'
 
 - name: Extract node_exporter for arm64 servers
   ansible.builtin.unarchive:
@@ -44,7 +44,7 @@
     remote_src: yes
     extra_opts:
       - "--strip-component=1"
-  when: ansible_architecture == 'aarch64' or ansible_architecture == 'arm64'
+  when: not ansible_check_mode and ansible_architecture == 'aarch64' or ansible_architecture == 'arm64'
 
 - name: Create node_exporter service
   template:
